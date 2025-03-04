@@ -56,6 +56,47 @@ with tab1:
     # Original dashboard content
     st.title("📡 Telecom Project Dashboard")
 
+    # Overall Summary Section
+    st.subheader("Overall Summary")
+
+    # Create summary data
+    summary_data = pd.DataFrame({
+        'PROGRAM': ['CBand', 'Macro New', 'Relo', 'HBR', '5G mmW', 'Crown', 'SC New', 
+                   'Carrier Add', 'Top10', 'Root', '1F Conversion', 'eNSB (Hub)'],
+        'Actuals_LTD': [134, 134, 19, 9, 8, 218, 96, 95, 222, 254, 0, 96],
+        'Total_Projects': [596, 131, 19, 12, 8, 185, 97, 526, 42, 69, 85, 69],
+        'YTD_Goal': [0, 22, 0, 2, 1, 45, 6, 0, 0, 0, 0, 9],
+        'Yearly_Goal': [0, 119, 0, 15, 6, 267, 28, 0, 0, 0, 0, 44],
+        'Actuals_YTD': [1, 5, 0, 0, 0, 33, 0, 1, 22, 9, 0, 14],
+        'YTD_%_of_Goal': ['0%', '23%', '0%', '0%', '100%', '73%', '0%', '0%', '0%', '0%', '0%', '156%'],
+        'Monthly_Goal': [0, 8, 0, 1, 0, 15, 1, 0, 0, 0, 0, 4],
+        'Actuals_MTD': [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        'MTD_%_of_Goal': ['0%', '0%', '0%', '0%', '0%', '0%', '0%', '0%', '0%', '0%', '0%', '0%'],
+        'Monthly_Avg': [46, 10, 1, 2, 2, 17, 16, 6, 4, 7, 8, 5],
+        'Activated_Today': [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+    })
+
+    # Display summary table
+    st.dataframe(
+        summary_data,
+        column_config={
+            'PROGRAM': st.column_config.TextColumn('PROGRAM'),
+            'Actuals_LTD': st.column_config.NumberColumn('Actuals LTD'),
+            'Total_Projects': st.column_config.NumberColumn('Total Projects'),
+            'YTD_Goal': st.column_config.NumberColumn('YTD Goal'),
+            'Yearly_Goal': st.column_config.NumberColumn('Yearly Goal'),
+            'Actuals_YTD': st.column_config.NumberColumn('Actuals YTD'),
+            'YTD_%_of_Goal': st.column_config.TextColumn('YTD % of Goal'),
+            'Monthly_Goal': st.column_config.NumberColumn('Monthly Goal'),
+            'Actuals_MTD': st.column_config.NumberColumn('Actuals MTD'),
+            'MTD_%_of_Goal': st.column_config.TextColumn('MTD % of Goal'),
+            'Monthly_Avg': st.column_config.NumberColumn('Monthly Avg.'),
+            'Activated_Today': st.column_config.NumberColumn('Activated Today')
+        },
+        hide_index=True,
+        use_container_width=True
+    )
+
     # Sidebar filters
     st.sidebar.header("Filters")
     search_term = st.sidebar.text_input("Search Projects", "")

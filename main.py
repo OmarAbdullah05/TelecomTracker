@@ -155,16 +155,21 @@ with tab2:
             'Owner': st.column_config.TextColumn('Owner'),
             'Program': st.column_config.TextColumn('Program'),
             'Tracker_Name': st.column_config.TextColumn('Tracker Name'),
-            'Tracker_ID': st.column_config.LinkColumn('Tracker Link',
-                                                      display_text='View Tracker',
-                                                      url=lambda x: f'https://example.com/tracker/{x}')
+            'Tracker_ID': st.column_config.TextColumn(
+                'Tracker Link',
+                help="Click to view tracker details"
+            )
         },
         hide_index=True,
         use_container_width=True
     )
 
+    # Add links below the table
+    for _, row in fuze_data.iterrows():
+        st.markdown(f"[{row['Tracker_Name']}](https://example.com/tracker/{row['Tracker_ID']})")
+
     # Add some helpful information
-    st.info("Click on 'View Tracker' to open the detailed tracker view in a new tab.")
+    st.info("Click on the tracker names above to open the detailed tracker view in a new tab.")
 
 # Footer
 st.markdown("---")

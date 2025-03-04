@@ -1,5 +1,6 @@
 import streamlit as st
 import pandas as pd
+import numpy as np
 from data_generator import generate_mock_data
 from utils import create_status_chart, create_region_chart, create_progress_gauge, filter_dataframe
 
@@ -33,17 +34,23 @@ st.markdown("""
     .stTabs [data-baseweb="tab"] {
         padding: 10px 20px;
     }
+    .build-status-table {
+        margin-top: 1rem;
+        font-size: 14px;
+    }
+    .build-status-table th {
+        background-color: #f8f9fa;
+        font-weight: bold;
+    }
     </style>
 """, unsafe_allow_html=True)
 
 # Initialize session state
 if 'data' not in st.session_state:
     st.session_state.data = generate_mock_data()
-if 'active_tab' not in st.session_state:
-    st.session_state.active_tab = "Projects"
 
 # Create tabs
-tab1, tab2 = st.tabs(["📊 Projects Dashboard", "🔍 Fuze Trackers"])
+tab1, tab2, tab3 = st.tabs(["📊 Projects Dashboard", "🔍 Fuze Trackers", "🏗️ Build Status"])
 
 with tab1:
     # Original dashboard content
@@ -170,6 +177,75 @@ with tab2:
 
     # Add some helpful information
     st.info("Click on the tracker names above to open the detailed tracker view in a new tab.")
+
+with tab3:
+    st.title("🏗️ Build Status Dashboard")
+
+    # Initialize build status data
+    initial_build_data = pd.DataFrame({
+        'Project_Type': ['5G mmW', 'CBand', 'Crown', 'HBR', 'Macro New', 'Relo', 'Root', 'SC New', 'Top10'],
+        'Total_Active': [7, 2, 185, 10, 129, 17, 51, 45, 40],
+        'Initial_Site_Walk': [7, 1, 137, 2, 8, 0, 5, 24, 10],
+        'Candidates_Accepted': [7, 2, 183, 10, 139, 15, 63, 46, 40],
+        'Candidates_Appd': [7, 2, 185, 11, 131, 15, 63, 46, 40],
+        'Preliminary_RFDS': [7, 2, 68, 9, 114, 15, 52, 40, 34],
+        'Construction_RFDS_Completed': [0, 0, 0, 4, 29, 0, 11, 6, 0],
+        'NEPA_Submit': [0, 0, 0, 0, 0, 0, 0, 0, 0],
+        'RFDS_Complete': [7, 2, 185, 10, 139, 17, 51, 46, 40]
+    })
+
+    modification_data = pd.DataFrame({
+        'Project_Type': ['1F Conversion', '5G mmW', 'CBand', 'eNSB (Hub)', 'Relo', 'Root', 'SC New', 'Top10'],
+        'Total_Active': [85, 1, 596, 69, 2, 6, 51, 2],
+        'Initial_Site_Walk': [0, 0, 0, 0, 0, 0, 0, 0],
+        'Candidates_Accepted': [64, 1, 596, 49, 2, 6, 51, 2],
+        'Candidates_Appd': [64, 1, 596, 49, 2, 6, 51, 2],
+        'Preliminary_RFDS': [0, 0, 579, 0, 1, 5, 45, 2],
+        'Construction_RFDS_Completed': [0, 0, 268, 0, 0, 3, 0, 2],
+        'NEPA_Submit': [0, 0, 0, 0, 0, 0, 0, 0],
+        'RFDS_Complete': [85, 1, 596, 69, 2, 6, 51, 2]
+    })
+
+    # Display Initial Build section
+    st.subheader("Initial Build")
+    st.dataframe(
+        initial_build_data,
+        column_config={
+            'Project_Type': st.column_config.TextColumn('Project Type'),
+            'Total_Active': st.column_config.NumberColumn('Total Active Projects'),
+            'Initial_Site_Walk': st.column_config.NumberColumn('Initial Site Walk (A)'),
+            'Candidates_Accepted': st.column_config.NumberColumn('Candidates Accepted (A)'),
+            'Candidates_Appd': st.column_config.NumberColumn('Candidates Appd By RF (A)'),
+            'Preliminary_RFDS': st.column_config.NumberColumn('Preliminary RFDS'),
+            'Construction_RFDS_Completed': st.column_config.NumberColumn('Construction RFDS Completed(A)'),
+            'NEPA_Submit': st.column_config.NumberColumn('NEPA Submit (A)'),
+            'RFDS_Complete': st.column_config.NumberColumn('RFDS Complete (A)')
+        },
+        hide_index=True,
+        use_container_width=True
+    )
+
+    # Display Modification section
+    st.subheader("Modification")
+    st.dataframe(
+        modification_data,
+        column_config={
+            'Project_Type': st.column_config.TextColumn('Project Type'),
+            'Total_Active': st.column_config.NumberColumn('Total Active Projects'),
+            'Initial_Site_Walk': st.column_config.NumberColumn('Initial Site Walk (A)'),
+            'Candidates_Accepted': st.column_config.NumberColumn('Candidates Accepted (A)'),
+            'Candidates_Appd': st.column_config.NumberColumn('Candidates Appd By RF (A)'),
+            'Preliminary_RFDS': st.column_config.NumberColumn('Preliminary RFDS'),
+            'Construction_RFDS_Completed': st.column_config.NumberColumn('Construction RFDS Completed(A)'),
+            'NEPA_Submit': st.column_config.NumberColumn('NEPA Submit (A)'),
+            'RFDS_Complete': st.column_config.NumberColumn('RFDS Complete (A)')
+        },
+        hide_index=True,
+        use_container_width=True
+    )
+
+    # Add some helpful information
+    st.info("This dashboard shows the current status of all build and modification projects across different stages.")
 
 # Footer
 st.markdown("---")
